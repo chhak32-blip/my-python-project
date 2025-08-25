@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'python:3.10-slim'   // lighter, faster than full image
+            image 'python:3.10-slim'
         }
     }
 
@@ -10,16 +10,16 @@ pipeline {
             steps {
                 sh '''
                   python --version
-                  pip install --upgrade pip
-                  if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-                  pip install pytest
+                  pip install --upgrade pip --user
+                  if [ -f requirements.txt ]; then pip install --user -r requirements.txt; fi
+                  pip install --user pytest
                 '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'pytest -v'
+                sh 'python -m pytest -v'
             }
         }
 
