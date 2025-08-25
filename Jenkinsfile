@@ -24,16 +24,25 @@ pipeline {
                 echo '🔍 Inspecting code structure...'
                 sh 'ls -la'
                 sh 'echo "Python files found:"'
-                sh 'find . -name "*.py" -type f'
+                sh 'find . -name "*.py" -type f || echo "No Python files found"'
             }
         }
         
-        stage('🐍 Python Environment') {
+        stage('🐍 Install Python') {
             steps {
-                echo '🐍 Setting up Python environment...'
-                sh 'python3 --version'
-                sh 'which python3'
-                echo '✅ Python environment ready'
+                echo '🐍 Installing Python...'
+                sh '''
+                    # Update package list
+                    apt-get update
+                    
+                    # Install Python
+                    apt-get install -y python3 python3-pip
+                    
+                    # Verify installation
+                    python3 --version
+                    pip3 --version
+                '''
+                echo '✅ Python installed successfully'
             }
         }
         
