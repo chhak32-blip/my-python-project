@@ -1,0 +1,12 @@
+# No external dependencies needed for this simple calculator
+# But including some common testing and development tools
+
+# Testing framework (built into Python, but good practice to list)
+# unittest - built-in, no need to install
+
+# Code formatting and linting tools (optional, for advanced users)
+black==23.7.0
+flake8==6.0.0
+
+# Coverage reporting (to see how much of your code is tested)
+coverage==7.2.7
