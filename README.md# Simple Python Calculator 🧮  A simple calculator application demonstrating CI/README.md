@@ -1,18 +1,13 @@
-# Simple Python Calculator 🧮
+# Simple Python App for Jenkins
 
-A simple calculator application demonstrating CI/CD with Jenkins and GitHub integration.
+This is a simple Python application to demonstrate Jenkins CI/CD pipeline.
 
-## Features
+## Files:
+- `app.py` - Main application
+- `test_app.py` - Unit tests
+- `Jenkinsfile` - Jenkins pipeline configuration
 
-- ✅ Basic arithmetic operations (add, subtract, multiply, divide)
-- ✅ Advanced operations (power, square root)
-- ✅ Interactive command-line interface
-- ✅ Calculation history
-- ✅ Comprehensive unit tests
-- ✅ Error handling
-
-## Usage
-
-### Running the Application
+## Run locally:
 ```bash
-python main.py
+python app.py
+python test_app.py
