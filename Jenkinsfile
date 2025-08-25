@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'python:3.10'   // Official Python image from DockerHub
+            image 'python:3.10-slim'   // lighter, faster than full image
         }
     }
 
@@ -10,7 +10,9 @@ pipeline {
             steps {
                 sh '''
                   python --version
-                  pip install -r requirements.txt || true
+                  pip install --upgrade pip
+                  if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+                  pip install pytest
                 '''
             }
         }
