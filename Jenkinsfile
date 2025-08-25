@@ -1,40 +1,30 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.10'   // Official Python image from DockerHub
+        }
+    }
 
     stages {
-        stage('Checkout') {
+        stage('Install Dependencies') {
             steps {
-                git branch: 'main', url: 'https://github.com/chhak32-blip/my-python-project.git'
-            }
-        }
-
-        stage('Set up Python') {
-            steps {
-                sh 'python3 -m venv venv'
-                sh '. venv/bin/activate && pip install --upgrade pip'
-                sh '. venv/bin/activate && pip install -r requirements.txt || true'
+                sh '''
+                  python --version
+                  pip install -r requirements.txt || true
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh '. venv/bin/activate && pytest -v'
+                sh 'pytest -v'
             }
         }
 
-        stage('Run Application') {
+        stage('Run App') {
             steps {
-                sh '. venv/bin/activate && python main.py'
+                sh 'python main.py'
             }
-        }
-    }
-
-    post {
-        success {
-            echo '✅ Pipeline succeeded!'
-        }
-        failure {
-            echo '❌ Pipeline failed. Check logs.'
         }
     }
 }
