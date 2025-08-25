@@ -1,61 +1,43 @@
-import sys
+import argparse
 from calculator import Calculator
 
-def run_demo():
-    """Run a non-interactive demo for CI/CD pipelines."""
-    calc = Calculator()
-    print("🧮 Welcome to the Simple Calculator!")
-    print("========================================")
-    print("Demonstrating calculator functions:")
-
-    print("5 + 3 =", calc.add(5, 3))
-    print("10 - 4 =", calc.subtract(10, 4))
-    print("6 × 7 =", calc.multiply(6, 7))
-    print("15 ÷ 3 =", calc.divide(15, 3))
-    print("2³ =", calc.power(2, 3))
-    print("√16 =", calc.square_root(16))
-
 def run_interactive():
-    """Run the calculator in interactive mode (local only)."""
     calc = Calculator()
-    print("\n🔢 Interactive Calculator Mode")
-    print("Enter two numbers and an operation (+, -, *, /, ^, sqrt)")
-    print("Type 'quit' to exit")
-
     while True:
         try:
-            user_input = input("Enter calculation (e.g., '5 + 3') or 'quit': ")
-            if user_input.lower() == "quit":
+            expr = input("Enter calculation (e.g., '5 + 3') or 'quit': ")
+            if expr.lower() == "quit":
                 break
-            parts = user_input.split()
-            
-            if len(parts) == 2 and parts[0].lower() == "sqrt":
-                num = float(parts[1])
-                print("Result:", calc.square_root(num))
-            elif len(parts) == 3:
-                a = float(parts[0])
-                op = parts[1]
-                b = float(parts[2])
-                if op == "+":
-                    print("Result:", calc.add(a, b))
-                elif op == "-":
-                    print("Result:", calc.subtract(a, b))
-                elif op == "*":
-                    print("Result:", calc.multiply(a, b))
-                elif op == "/":
-                    print("Result:", calc.divide(a, b))
-                elif op == "^":
-                    print("Result:", calc.power(a, b))
-                else:
-                    print("❌ Unknown operator")
+            a, op, b = expr.split()
+            a, b = float(a), float(b)
+
+            if op == "+":
+                print(calc.add(a, b))
+            elif op == "-":
+                print(calc.subtract(a, b))
+            elif op == "*":
+                print(calc.multiply(a, b))
+            elif op == "/":
+                print(calc.divide(a, b))
             else:
-                print("❌ Invalid input format")
+                print("Unknown operator")
         except Exception as e:
-            print("❌ Error:", e)
+            print(f"❌ Error: {e}")
+
+def run_ci():
+    calc = Calculator()
+    print("Running in CI mode...")
+    print("2 + 3 =", calc.add(2, 3))
+    print("10 - 4 =", calc.subtract(10, 4))
+    print("6 * 7 =", calc.multiply(6, 7))
+    print("8 / 2 =", calc.divide(8, 2))
 
 if __name__ == "__main__":
-    if "--ci" in sys.argv:   # Jenkins mode
-        run_demo()
-    else:                   # Local mode
-        run_demo()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ci", action="store_true", help="Run in CI mode without input()")
+    args = parser.parse_args()
+
+    if args.ci:
+        run_ci()
+    else:
         run_interactive()
