@@ -1,0 +1,2 @@
+# No external dependencies for this simple example
+# Add your Python packages here if needed
