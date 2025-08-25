@@ -2,56 +2,69 @@ pipeline {
     agent {
         docker {
             image 'python:3.11-slim'
-            args '-u root'
+            args '-u root'  // Ensure pip works with no permission issues
         }
     }
-    
+
     stages {
         stage('📋 Preparation') {
             steps {
                 echo '🚀 Starting Jenkins Pipeline for Python Application'
-                echo '📂 Workspace: ' + env.WORKSPACE
-                echo '🏗️  Build Number: ' + env.BUILD_NUMBER
+                echo "📂 Workspace: ${env.WORKSPACE}"
+                echo "🏗️ Build Number: ${env.BUILD_NUMBER}"
             }
         }
-        
+
         stage('📥 Checkout') {
             steps {
                 echo '📥 Checking out source code...'
                 checkout scm
-                echo '✅ Source code checked out successfully'
             }
         }
-        
+
         stage('🐍 Python Environment') {
             steps {
-                echo '🐍 Checking Python environment...'
+                echo '🐍 Checking Python version...'
                 sh 'python3 --version'
                 sh 'pip3 --version'
-                echo '✅ Python environment ready'
             }
         }
-        
+
+        stage('📦 Install Dependencies') {
+            steps {
+                echo '📦 Installing required packages...'
+                sh 'pip3 install -r requirements.txt'
+            }
+        }
+
         stage('🧪 Run Tests') {
             steps {
                 echo '🧪 Running unit tests...'
                 sh 'python3 test_app.py'
-                echo '✅ All tests passed!'
             }
         }
-        
+
         stage('🏃‍♂️ Run Application') {
             steps {
-                echo '🏃‍♂️ Running the main application...'
+                echo '🏃‍♂️ Executing app.py...'
                 sh 'python3 app.py'
-                echo '✅ Application executed successfully!'
+            }
+        }
+
+        stage('📊 Generate Report') {
+            steps {
+                echo '📊 Generating build report...'
+                sh 'ls -la'
             }
         }
     }
-    
+
     post {
         success {
-            echo '🎉 Pipeline completed successfully!'
+            echo '🎉 Build and tests succeeded!'
+        }
+        failure {
+            echo '❌ Build failed. Please check the logs.'
         }
     }
 }
